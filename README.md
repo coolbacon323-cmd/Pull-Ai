@@ -1,49 +1,26 @@
 # Power AI
 
-A local-first AI coding workspace with a code editor, assistant UI, Node.js API, dataset manager, and experimental trainable language model.
+Minimal local coding workspace with a built-in Node.js backend and an experimental text trainer.
 
-## Minimum requirements
-
-- **Node.js 20+** (Node.js 22 or 24 is fine)
+## Requirements
+- Node.js 20 or newer
 - Windows, macOS, or Linux
-- No npm install step, no third-party packages, no API keys, no account, and no internet connection required after the project files are on your computer.
+- No npm commands, no npm install, no packages, API keys, account, or internet needed once the project is on your computer.
 
-## Start
+## Run on Windows
+Double-click `start.bat`, or open PowerShell in this folder and run:
 
-Open a terminal in the project folder and run:
+```powershell
+node server.js
+```
 
-\`\`\`bash
-npm start
-\`\`\`
+Then open http://127.0.0.1:3000. Keep the terminal window open while using the site.
 
-Then open http://127.0.0.1:3000 in your browser.
+## What it does
+- Code: edit files and save them to the local backend.
+- Chat: basic built-in coding helper, not a modern LLM.
+- Train: add text examples and train a word-level bigram statistical model.
 
-The server stores your workspace, datasets, and model under \`data/\`. Back up that folder if you want to preserve training data and trained weights. The default server address is localhost only.
+Training counts token transitions. It is real statistical training but not a Transformer or deep-reasoning model. Generated text may be incoherent. The app does not call external AI providers. Files, datasets, and model data are stored in the server's `data/` folder.
 
-## What is included
-
-- **Code Studio:** edit and save project files; create files and switch between them.
-- **AI Assistant:** a local backend endpoint with basic coding workflow guidance.
-- **Training Lab:** add text datasets, train the statistical model, see token/vocabulary counts, and test generation.
-- **No hosted inference:** the application does not call OpenAI, Anthropic, Google, Groq, or another external AI provider.
-
-## Training status: read this
-
-The current trainer learns a word-level bigram model by counting which tokens follow one another in the supplied text. This is genuine statistical training, but it is **not a Transformer or a modern coding LLM**. Its generated text can be incoherent and it does not have deep reasoning. The next major milestone is a tokenizer plus a small neural Transformer training and inference pipeline.
-
-Use original training material or text you have permission to use.
-
-## API overview
-
-- \`GET /api/health\`
-- \`GET /api/workspace\`
-- \`PUT /api/workspace\`
-- \`GET /api/datasets\`
-- \`POST /api/datasets\`
-- \`DELETE /api/datasets/:id\`
-- \`POST /api/train\`
-- \`POST /api/chat\`
-
-## Safety
-
-The server intentionally binds to \`127.0.0.1\`. The workspace endpoints do not yet include authentication or multi-user access controls, so do not expose this backend publicly as-is. The editor stores code as text and does not execute submitted code on the server.
+Use original training data or text you have permission to use. The server binds to localhost and should not be exposed publicly without authentication.
