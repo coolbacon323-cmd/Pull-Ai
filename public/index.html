@@ -1,59 +1,18 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#101216">
-<meta name="description" content="Power AI — coding workspace, assistant and experimental model training lab.">
-<title>Power AI — Code & Train</title>
-<link rel="stylesheet" href="/styles.css">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#111310"><title>Power AI</title><link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-<div class="app-shell">
-  <aside class="sidebar">
-    <a class="brand" href="/" aria-label="Power AI home"><span class="brand-mark">P</span><span>POWER <b>AI</b><small>BUILD YOUR OWN INTELLIGENCE</small></span></a>
-    <button class="new-project" id="newProject">＋ <span>New workspace</span></button>
-    <div class="nav-label">WORKSPACE</div>
-    <button class="nav-item active" data-view="code"><span>⌘</span> Code Studio</button>
-    <button class="nav-item" data-view="assistant"><span>✳</span> AI Assistant</button>
-    <button class="nav-item" data-view="training"><span>◈</span> Training Lab <i id="datasetBadge">1</i></button>
-    <div class="sidebar-bottom">
-      <div class="status-dot"></div><div><b id="backendStatus">Connecting backend…</b><small id="modelStatus">Checking model</small></div>
-    </div>
-  </aside>
-  <main class="main">
-    <header class="topbar"><div><span class="breadcrumb">POWER AI</span><span class="slash">/</span><b id="viewTitle">Code Studio</b></div><div class="top-actions"><span class="backend-pill"><i></i> Backend connected</span><button class="icon-button" id="refreshBtn" title="Refresh status">↻</button></div></header>
-    <section class="view active" id="view-code">
-      <div class="page-heading"><div><div class="eyebrow">YOUR BUILD SPACE</div><h1>Make something <em>powerful.</em></h1><p>Edit files, save your project to the backend, and ask the assistant for coding guidance.</p></div><button class="primary" id="saveBtn">Save project <kbd>Ctrl S</kbd></button></div>
-      <div class="editor-layout">
-        <section class="editor-panel">
-          <div class="panel-bar"><div class="panel-title"><span class="tiny-dot"></span> PROJECT FILES</div><button class="text-button" id="addFileBtn">＋ New file</button></div>
-          <div class="file-tabs" id="fileTabs"></div>
-          <div class="editor-wrap"><div class="line-numbers" id="lineNumbers">1</div><textarea id="codeEditor" spellcheck="false" aria-label="Code editor" autocapitalize="off" autocomplete="off"></textarea></div>
-          <div class="editor-footer"><span id="fileInfo">main.py · Python</span><span id="saveState">All changes saved</span></div>
-        </section>
-        <aside class="right-column">
-          <section class="mini-panel assistant-card"><div class="panel-bar"><div class="panel-title">✳ POWER ASSISTANT</div><span class="tag">EARLY ACCESS</span></div><div class="assistant-content"><div class="assistant-avatar">P</div><h3>What are you building?</h3><p>Describe the feature or paste an error. The current assistant is a bootstrap helper; it does not yet have a large neural model.</p><textarea id="quickPrompt" placeholder="e.g. Explain this function or help fix a bug…"></textarea><button class="primary full" id="askQuick">Ask Power AI <span>↗</span></button><div id="quickAnswer" class="quick-answer hidden"></div></div></section>
-          <section class="mini-panel"><div class="panel-bar"><div class="panel-title">MODEL STATUS</div><span class="status-chip" id="modelChip">BOOTSTRAP</span></div><div class="stats-grid"><div><strong id="vocabStat">—</strong><small>Vocabulary</small></div><div><strong id="dataStat">1</strong><small>Datasets</small></div><div><strong id="filesStat">3</strong><small>Project files</small></div></div><button class="subtle full" data-go="training">Open training lab →</button></section>
-        </aside>
-      </div>
-    </section>
-    <section class="view" id="view-assistant">
-      <div class="page-heading"><div><div class="eyebrow">LOCAL API · NO EXTERNAL AI PROVIDERS</div><h1>AI <em>Assistant.</em></h1><p>Talk to the Power AI backend. Train the experimental model in the Training Lab.</p></div></div>
-      <div class="chat-panel"><div class="chat-log" id="chatLog"><div class="chat-message assistant"><div class="message-avatar">P</div><div><b>Power AI</b><p>I'm the Power AI bootstrap assistant. I can guide basic coding workflows. Train the experimental model in the lab, but note that a small statistical model won't behave like a modern LLM.</p></div></div></div><form id="chatForm" class="chat-form"><textarea id="chatInput" rows="2" placeholder="Ask a coding question…" required></textarea><button class="primary" type="submit">Send ↗</button></form><div class="hint">Enter to send · Shift + Enter for a new line</div></div>
-    </section>
-    <section class="view" id="view-training">
-      <div class="page-heading"><div><div class="eyebrow">MODEL DEVELOPMENT</div><h1>Training <em>Lab.</em></h1><p>Add text examples, build a local statistical language model, and inspect training metrics.</p></div><button class="primary" id="trainBtn">▶ Train model</button></div>
-      <div class="training-warning"><span>ⓘ</span><div><b>What this training does</b><p>Power AI currently trains a word-level bigram model from your text: it learns which tokens tend to follow other tokens. This is genuine local training, but it is not a Transformer, does not learn deep reasoning, and may generate incoherent text. No external AI provider is called.</p></div></div>
-      <div class="training-grid">
-        <section class="panel dataset-panel"><div class="panel-bar"><div><div class="panel-title">TRAINING DATASETS</div><small class="muted">Text examples used by the trainer</small></div><span class="count-pill" id="datasetCount">1 dataset</span></div><form id="datasetForm" class="dataset-form"><label for="datasetName">Dataset name</label><input id="datasetName" maxlength="100" value="My training examples" required><label for="datasetText">Training text <small>(minimum 20 characters)</small></label><textarea id="datasetText" rows="8" placeholder="Paste original explanations, code examples, documentation or dialogue you have permission to use…" required></textarea><button class="primary" type="submit">＋ Add dataset</button></form><div id="datasetList" class="dataset-list"></div></section>
-        <section class="panel metrics-panel"><div class="panel-bar"><div class="panel-title">TRAINING RUN</div><span class="tag">ON THIS BACKEND</span></div><div id="trainingState" class="training-state"><div class="empty-symbol">◈</div><h3>Ready to train</h3><p>Add your own examples, then start a training run. The model and datasets are saved under the server's <code>data/</code> folder.</p></div><div id="trainingMetrics" class="metrics hidden"><div><small>Tokens learned</small><strong id="metricTokens">—</strong></div><div><small>Vocabulary size</small><strong id="metricVocab">—</strong></div><div><small>Datasets used</small><strong id="metricSets">—</strong></div><div><small>Training finished</small><strong id="metricTime">—</strong></div></div><div class="test-generation"><label for="testPrompt">Try the trained model</label><textarea id="testPrompt" rows="2" placeholder="Enter a short prompt…"></textarea><button class="subtle full" id="testModelBtn">Generate with trained model</button><pre id="testOutput" class="test-output hidden"></pre></div></section>
-      </div>
-    </section>
-    <div class="toast" id="toast" role="status" aria-live="polite"></div>
-    <footer>POWER AI <span>·</span> YOUR PROJECT, YOUR DATA, YOUR EXPERIMENT</footer>
-  </main>
-</div>
-<script src="/app.js" defer></script>
-</body>
-</html>
+<header class="top"><a class="brand" href="/">power<span>ai</span></a><nav aria-label="Main navigation"><button class="nav active" data-view="code">Code</button><button class="nav" data-view="assistant">Chat</button><button class="nav" data-view="training">Train</button></nav><span class="connection" id="backendStatus">Connecting…</span></header>
+<main>
+<section class="view active" id="view-code"><div class="heading"><div><h1>Code workspace</h1><p>Edit files and save locally.</p></div><button class="primary" id="saveBtn">Save</button></div>
+<div class="files" id="fileTabs"></div><div class="editor"><div class="line-numbers" id="lineNumbers">1</div><textarea id="codeEditor" aria-label="Code editor" spellcheck="false"></textarea></div><div class="editor-foot"><span id="fileInfo">main.py · Python</span><span id="saveState">Saved</span><button class="link" id="addFileBtn">+ File</button></div></section>
+<section class="view" id="view-assistant"><div class="heading"><div><h1>Chat</h1><p>Basic built-in helper. No external AI provider.</p></div></div><div class="chat-panel"><div class="chat-log" id="chatLog"><div class="chat-message assistant"><div class="message-avatar">P</div><div><b>Power AI</b><p>I can help with simple coding workflows. The current backend is not yet a modern large language model.</p></div></div></div><form id="chatForm" class="chat-form"><textarea id="chatInput" rows="2" placeholder="Ask a coding question…" required></textarea><button class="primary" type="submit">Send</button></form><div class="hint">Enter to send · Shift+Enter for a new line</div></div></section>
+<section class="view" id="view-training"><div class="heading"><div><h1>Train model</h1><p>Add text examples and train the small statistical model.</p></div><button class="primary" id="trainBtn">Train</button></div><p class="notice">This learns word-to-word transitions. It is not a Transformer or a modern LLM, so results may be incoherent.</p>
+<form id="datasetForm" class="dataset-form"><label for="datasetName">Dataset name</label><input id="datasetName" value="My examples" maxlength="100" required><label for="datasetText">Training text <span>at least 20 characters</span></label><textarea id="datasetText" rows="5" placeholder="Paste text you have permission to use…" required></textarea><button class="primary" type="submit">Add text</button></form><div class="dataset-list" id="datasetList"></div>
+<div class="training-result" id="trainingState"><b>Ready</b><p>Add examples, then select Train.</p></div><div class="training-metrics hidden" id="trainingMetrics"><span>Tokens <b id="metricTokens">—</b></span><span>Vocabulary <b id="metricVocab">—</b></span><span>Datasets <b id="metricSets">—</b></span><span>Finished <b id="metricTime">—</b></span></div>
+<div class="test-generation"><label for="testPrompt">Test the model</label><textarea id="testPrompt" rows="2" placeholder="Enter a prompt…"></textarea><button class="subtle" id="testModelBtn">Generate</button><pre id="testOutput" class="test-output hidden"></pre></div></section>
+<div class="toast" id="toast" role="status" aria-live="polite"></div></main>
+<script src="/app.js" defer></script></body></html>
